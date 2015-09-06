@@ -200,10 +200,11 @@ sendPatchSeries recipient replyTo prevThreadInfo checkoutHookCmd
     logInfo $ "Adding remote " ++ uriR
     () <- cmd ("git remote add pullrequest git://github.com/" ++ uriR)
     logInfo $ "Fetching from the remote: " ++ tipBranch
-    -- We would prefer to do `git fetch pullrequest tipBranch` here, but
-    -- in git < 1.8.4 this doesn't make pullrequest/tipBranch available,
-    -- so we have to fetch the whole remote in order to support this version.
-    () <- cmd "git fetch pullrequest"
+    -- We now do`git fetch pullrequest tipBranch` here, because in 
+    -- in git >= 1.8.4 this makes pullrequest/tipBranch available,
+    -- so we do not have to fetch the whole remote in order to support
+    -- these new versions.
+    () <- cmd ("git fetch pullrequest " ++ tipBranch)
 
     () <- cmd "git branch -rv"
     () <- cmd "git remote -v"
